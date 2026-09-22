@@ -23,9 +23,11 @@ def index():
 @app.route("/lookup", methods=["POST"])
 def lookup():
     number = request.form.get("number")
-    api_key = os.getenv("LOOKUP_API_KEY", "")
-    # Example API call (replace with your actual API)
-    response = requests.get(f"https://your-api.com/lookup?number={number}&key={api_key}")
+    api_key = os.getenv("LOOKUP_API_KEY", "anshapi")  # default key
+    # ✅ Actual API call
+    response = requests.get(
+        f"https://anshapi.vercel.app/api/num?key={api_key}&number={number}"
+    )
     data = response.json()
     save_log(number, data)
     return render_template("result.html", number=number, data=data, history=[number])
