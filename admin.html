@@ -1,0 +1,20 @@
+ECHO is on.
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Admin Dashboard</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h1 class="hacker">Admin Analytics Dashboard</h1>
+  <p>Total Searches: {{ total }}</p>
+  <p>Premium Users: {{ premium }}</p>
+  <hr>
+  {% for log in logs %}
+    <div class="card">
+      <p><b>Number:</b> {{ log.number }}</p>
+      <pre>{{ log.result | tojson(indent=2) }}</pre>
+    </div>
+  {% endfor %}
+</body>
+</html>

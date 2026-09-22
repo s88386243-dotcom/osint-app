@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>OSINT Lookup</title>
+  <link rel="stylesheet" href="/static/style.css">
+  <script src="/static/script.js"></script>
+</head>
+<body>
+  <div class="banner">🔒 All searches are encrypted & secure.</div>
+
+  <div class="welcome">
+    <h1 class="hacker">🔍 OSINT Phone Lookup</h1>
+    <p>Welcome to the OSINT Lookup Portal.<br>
+       Developed by <b>Sandesh Kumar Maddheshia</b>.</p>
+    <p>Connect with me on Instagram:
+       <a href="https://instagram.com/cyber_.mind" target="_blank" class="social">@cyber_.mind</a>
+    </p>
+    <hr>
+  </div>
+
+  <form method="POST" onsubmit="showLoading()">
+    <input type="text" name="number" placeholder="Enter phone number">
+    <button type="submit">Search</button>
+  </form>
+
+  <div id="loading" style="display:none;">
+    <p class="hacker">💻 Scanning… Please wait</p>
+  </div>
+
+  <button onclick="toggleMode()">Toggle Dark/Light Mode</button>
+
+  <footer>
+    <p>© 2026 Sandesh Kumar Maddheshia | Quick Links: <a href="/admin">Admin</a></p>
+  </footer>
+</body>
+</html>
+ECHO is on.

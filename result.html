@@ -1,0 +1,33 @@
+ECHO is on.<!DOCTYPE html>
+<html>
+<head>
+  <title>Search Result</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <h2 class="hacker">📱 Result for {{ number }}</h2>
+
+  <!-- Categorized Output -->
+  <div class="card">
+    <h3>Lookup Data</h3>
+    <pre>{{ data | tojson(indent=2) }}</pre>
+  </div>
+
+  <!-- User Search History -->
+  <div class="card">
+    <h3>Your Last 5 Searches</h3>
+    <ul>
+      {% for item in history %}
+        <li>{{ item }}</li>
+      {% endfor %}
+    </ul>
+  </div>
+
+  <a href="/">🔙 Back to Home</a>
+
+  <footer>
+    <p>© 2026 Sandesh Kumar Maddheshia | <a href="/admin">Admin Dashboard</a></p>
+  </footer>
+</body>
+</html>
+
