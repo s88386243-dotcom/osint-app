@@ -1,0 +1,39 @@
+ECHO is on.
+body {
+  background: black;
+  color: lime;
+  font-family: monospace;
+  margin: 0;
+  padding: 20px;
+}
+.light-mode {
+  background: white;
+  color: black;
+}
+.hacker { text-shadow: 0 0 10px #0f0; }
+input, button {
+  width: 90%;
+  max-width: 400px;
+  margin: 10px auto;
+  display: block;
+  background: black;
+  color: lime;
+  border: 1px solid lime;
+  padding: 10px;
+}
+.banner {
+  background: #111;
+  color: cyan;
+  text-align: center;
+  padding: 5px;
+}
+.card {
+  border: 1px solid lime;
+  margin: 10px;
+  padding: 10px;
+}
+footer {
+  margin-top: 20px;
+  text-align: center;
+  font-size: 12px;
+}
