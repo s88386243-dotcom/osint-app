@@ -1,4 +1,3 @@
-ECHO is on.
 function showLoading() {
   document.getElementById("loading").style.display = "block";
 }
