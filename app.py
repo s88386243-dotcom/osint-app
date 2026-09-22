@@ -1,69 +1,48 @@
-from flask import Flask, render_template, request, session
-import requests, os, json
+from flask import Flask, render_template, request, jsonify
+import os, json, requests
 
 app = Flask(__name__)
-app.secret_key = "supersecret"  # change this
 
-API_KEY = os.getenv("LOOKUP_API_KEY")
+# Load logs
 LOG_FILE = "logs.json"
-
-def save_log(entry):
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "r") as f:
-            data = json.load(f)
-    else:
-        data = []
-    data.append(entry)
+if not os.path.exists(LOG_FILE):
     with open(LOG_FILE, "w") as f:
-        json.dump(data, f, indent=2)
+        f.write("[]")
 
-def check_limit():
-    if "search_count" not in session:
-        session["search_count"] = 0
-    session["search_count"] += 1
-    return session["search_count"]
+def save_log(number, result):
+    with open(LOG_FILE, "r+") as f:
+        logs = json.load(f)
+        logs.append({"number": number, "result": result})
+        f.seek(0)
+        json.dump(logs, f, indent=2)
 
-@app.route("/", methods=["GET","POST"])
+@app.route("/")
 def index():
-    if request.method == "POST":
-        count = check_limit()
-        if count > 2 and "premium" not in session:
-            return render_template("premium.html")
-
-        number = request.form["number"]
-        response = requests.get(
-            f"https://your-api.com/lookup?number={number}",
-            headers={"Authorization": f"Bearer {API_KEY}"}
-        )
-        data = response.json()
-
-        # Save log
-        save_log({"number": number, "result": data})
-
-        # Save user history (last 5 searches)
-        if "history" not in session:
-            session["history"] = []
-        session["history"].append(number)
-        session["history"] = session["history"][-5:]
-
-        return render_template("result.html", data=data, number=number, history=session["history"])
     return render_template("index.html")
 
-@app.route("/unlock")
-def unlock():
-    session["premium"] = True
-    return "✅ Premium unlocked!"
+@app.route("/lookup", methods=["POST"])
+def lookup():
+    number = request.form.get("number")
+    api_key = os.getenv("LOOKUP_API_KEY", "")
+    # Example API call (replace with your actual API)
+    response = requests.get(f"https://your-api.com/lookup?number={number}&key={api_key}")
+    data = response.json()
+    save_log(number, data)
+    return render_template("result.html", number=number, data=data, history=[number])
+
+@app.route("/premium")
+def premium():
+    return render_template("premium.html")
 
 @app.route("/admin")
 def admin():
-    if os.path.exists(LOG_FILE):
-        with open(LOG_FILE, "r") as f:
-            logs = json.load(f)
-    else:
-        logs = []
-    total_searches = len(logs)
-    premium_users = 1 if "premium" in session else 0
-    return render_template("admin.html", logs=logs, total=total_searches, premium=premium_users)
+    with open(LOG_FILE) as f:
+        logs = json.load(f)
+    total = len(logs)
+    premium = sum(1 for log in logs if "premium" in log.get("result", {}))
+    return render_template("admin.html", logs=logs, total=total, premium=premium)
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=7860)
+    # ✅ Important Fix: Bind to 0.0.0.0 and PORT env
+    port = int(os.environ.get("PORT", 8000))
+    app.run(host="0.0.0.0", port=port)
